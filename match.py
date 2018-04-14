@@ -26,8 +26,8 @@ for person in data.keys():
 
         elif assignment == "T":
             G.add_edge(
-                "concept::" + concept, "teaching::" + person, capacity=1)
-            G.add_edge("teaching::" + person, "drain", capacity=1)
+                "concept::" + concept, "teaching::" + person, capacity=5)
+            G.add_edge("teaching::" + person, "drain", capacity=5)
 
 nx.draw_networkx(G)
 plt.savefig("pokus.png")
