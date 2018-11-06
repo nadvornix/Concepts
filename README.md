@@ -8,5 +8,24 @@
 
 It is possible to solve this as an integer linear programming problem. That may be a more general approach.
 
+# Installation:
+
+```
+sudo apt install python-pydot python-pydot-ng graphviz libgraphviz-dev
+pip install -r requirements.txt
+```
 # TODO:
 - invent better name
+
+# my notes::
+- see how alg works (and is running)
+- design user interface
+- design server architecture
+- put it all together
+
+- design an algorithm w/ more features (multiple rounds ...)
+
+- refactor code, make it pep compliant, write tests, make nice git repo
+
+constraints:
+- nejsou skupiny o jednoom člověku
