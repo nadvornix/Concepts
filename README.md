@@ -18,14 +18,26 @@ pip install -r requirements.txt
 - invent better name
 
 # my notes::
-- see how alg works (and is running)
 - design user interface
 - design server architecture
 - put it all together
 
-- design an algorithm w/ more features (multiple rounds ...)
-
-- refactor code, make it pep compliant, write tests, make nice git repo
 
 constraints:
-- nejsou skupiny o jednoom člověku
+- randomize (? - to have multiple possible sets)
+- indiference
+
+- priority (co by učili více/méně rádi)
+- multiple rounds v kt. stejní lidi neučí ve všech.
+- check: learning set != teaching set
+
+- multiple rounds
+- in multiple rounds teach/learn one thing only once.
+- no free people
+  - automatic low-priority (cap 0.001) edges everybody -> learning everything
+
+- nejsou skupiny o jednom člověku.
+  - automatic.
+
+MAYBE (future version):
+- same topic taught in multiple groups at once

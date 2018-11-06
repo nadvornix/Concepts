@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 
+from itertools import groupby
+import re
 import networkx as nx
 import matplotlib.pyplot as plt
 from pulp import *
 
 max_group_size = 5
+num_rounds = 3
 
 
 def unique(l):
@@ -42,23 +45,32 @@ def edges_in(vars, node):
     return dict(result)
 
 
-def data_to_graph(data):
+def data_to_graph(data, num_rounds):
     people_names = data.keys()
 
     G = nx.DiGraph()
-    for person in people_names:
-        for concept, assignment in data[person].items():
-            if assignment == "L":
-                G.add_edge("source", "learning::" + person, capacity=1)
-                G.add_edge(
-                    "learning::" + person, "concept::" + concept, capacity=1)
+    for round in range(num_rounds):
+        round_str = "round-%s::" % round
 
-            elif assignment == "T":
-                G.add_edge(
-                    "concept::" + concept, "teaching::" + person, capacity=5)
-                G.add_edge("teaching::" + person, "drain", capacity=5)
+        for person in people_names:
+            for concept, assignment in data[person].items():
+                if assignment == "L":
+                    G.add_edge("source", round_str+"learning::" + person, capacity=1)
+                    G.add_edge(
+                        round_str+"learning::" + person, round_str+"concept::" + concept, capacity=1)
+
+                elif assignment == "T":
+                    G.add_edge(
+                        round_str+"concept::" + concept, round_str+"teaching::" + person, capacity=5)
+                    G.add_edge(round_str+"teaching::" + person, "drain", capacity=5)
+
     return G
 
+def var_to_name(var_name):
+    return re.match('.*name::([a-zA-Z]+)', var_name).group(1)
+
+def filter_vars(all_vars, regex):
+    return {var_name: var for var_name, var in all_vars.items() if re.match(regex, var_name)}
 
 def main():
     data = {
@@ -77,7 +89,7 @@ def main():
         }
     }
 
-    G = data_to_graph(data)
+    G = data_to_graph(data, num_rounds)
 
     nx.draw_networkx(G)
     plt.savefig("pokus.png")
@@ -115,13 +127,31 @@ def main():
     # adding additional constrants:
     # teacher of one group cannot be in second group:
     people_names = data.keys()
-    for person in people_names:
-        # a and b are nodes representing this person
-        a = edges_in(all_vars, "teaching::" + person)
-        b = edges_out(all_vars, "learning::" + person)
-        prob += (lpSum(a) + lpSum(b) <= 1,
-            "person_is_never_teaching_one_and_learning_other_" + person)
-        print(">>", person, a, b)
+    for round in range(num_rounds):
+        round_str = "round-%s::" % round
+        for person in people_names:
+            # a and b are nodes representing this person
+            a = edges_in(all_vars, round_str+"teaching::" + person)
+            b = edges_out(all_vars, round_str+"learning::" + person)
+            prob += (lpSum(a) + lpSum(b) <= 1,
+                round_str+"person_is_never_teaching_one_and_learning_other_" + person)
+            print(">>", person, a, b)
+
+    # forbid repeating of same topic for same people in multiple rounds:
+    learning_vars = filter_vars(all_vars, '.*learning.*concept')
+    people = groupby(sorted(learning_vars.keys(), key=var_to_name), var_to_name)
+
+    # N: stupid var names
+    for key, edge_group in people:
+        edge_group_list = list(edge_group)
+        vars = []
+        for var_name in edge_group_list:
+            vars.append(all_vars[var_name])
+
+        # vars = [all_Vars[var_name] for var_name in edge_group_list]
+        prob += (lpSum(vars) <= 1,
+            key+" can learn this concept only once")
+
 
     # so far, drain was only a string and we had variables for edges.
     drain = LpVariable("drain", lowBound=0)
