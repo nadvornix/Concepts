@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Results of poll {{poll.name}}</title>
+  </head>
+  <body>
+  <h2>Results of poll {{poll.name}}</h2>
+  <form action="" method="POST">
+    <table>
+      {% for response in poll.responses.values() %}
+        <tr>
+          <td>{{response.participant_name}}</td>
+        </tr>
+      {% endfor %}
+    <tr>
+    </tr>
+    </table>
+    <input type="submit" value="create groups">
+  </form>
+  </body>
+</html>

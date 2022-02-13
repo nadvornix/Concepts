@@ -1,0 +1,40 @@
+{
+    "0": {
+        "name": "PPokus",
+        "ideas": [
+            "aa",
+            "vv",
+            "bb"
+        ],
+        "id": 0
+    },
+    "1": {
+        "name": "PPokus",
+        "ideas": [
+            "aa",
+            "vv",
+            "bb"
+        ],
+        "id": 1,
+        "responses": {
+            "asdf": {
+                "radio-1": "learn",
+                "radio-2": "teach",
+                "radio-3": "indifferent",
+                "participant_name": "asdf"
+            },
+            "JJJ": {
+                "radio-1": "teach",
+                "radio-2": "teach",
+                "radio-3": "teach",
+                "participant_name": "JJJ"
+            },
+            "aaaa": {
+                "radio-1": "learn",
+                "radio-2": "learn",
+                "radio-3": "indifferent",
+                "participant_name": "aaaa"
+            }
+        }
+    }
+}

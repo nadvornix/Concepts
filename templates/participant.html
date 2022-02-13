@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Participant poll</title>
+    <style>
+      table {
+        border-collapse: collapse;
+      }
+
+    table, th, td {
+      border: 1px solid black;
+    }
+    td {
+      padding: 0.3em;
+    }
+
+    </style>
+  </head>
+  <body>
+    <h2>Participant poll</h2>
+    <h3>{{item.name}}</h3>
+    <form action="" method="post">
+    <table>
+      <tr>
+        <th>Idea</th>
+        <th>I want to learn</th>
+        <th>I am indifferent</th>
+        <th>I want to tech</th>
+      </tr>
+
+    {% for idea in item.ideas %}
+      <tr>
+      <td>{{idea}}</td>
+      <!-- <fieldset id="group-{{idea}}"> -->
+        <td><input type="radio" name="radio-{{loop.index}}" value="teach" id="group-{{loop.index}}"></td>
+        <td><input type="radio" name="radio-{{loop.index}}" value="indifferent" id="group-{{loop.index}}" checked></td>
+        <td><input type="radio" name="radio-{{loop.index}}" value="learn" id="group-{{loop.index}}"></td>
+      <!-- </fieldset> -->
+      </tr>
+
+    {% endfor %}
+  </table>
+  Your name: <input type="text" name="participant_name"><br>
+  <input type="submit">
+  </form>
+
+  </body>
+</html>
